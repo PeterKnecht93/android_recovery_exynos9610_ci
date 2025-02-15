@@ -9,18 +9,18 @@ jobs:
   twrp:
     name: Build TeamWin Recovery Project (TWRP)
     if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@master
 
     - name: Run pre-build housekeeping
       run: |
-        docker rmi `docker images -q`
+        docker images -q | xargs -r docker rmi
         sudo systemctl stop mysql
         sudo apt purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
         sudo rm -rf /etc/mysql /var/lib/mysql /var/log/mysql
         sudo rm -rf /usr/share/dotnet etc/php /etc/sudo apt/sources.list.d
-        sudo apt -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* php*
+        sudo apt -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* php*
         sudo apt update
         sudo apt -y autoremove --purge
         sudo apt clean
@@ -33,16 +33,11 @@ jobs:
       run: |
         sudo apt update
         sudo apt full-upgrade
-        sudo apt install git-core gnupg build-essential libelf-dev kernel-package bzip2 openjdk-8-jdk lib32stdc++6 libc6-dev-i386 git flex bison gperf zip curl zlib1g-dev gcc-multilib g++-multilib lib32ncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc unzip jq -y
+        sudo apt install git-core gnupg build-essential python2 python2-dev libelf-dev bzip2 openjdk-8-jdk lib32stdc++6 libc6-dev-i386 git flex bison gperf zip curl zlib1g-dev gcc-multilib g++-multilib libncurses5 libncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc unzip jq -y
+        sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
         mkdir ~/bin
         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
         chmod a+x ~/bin/repo
-
-    - name: Setup Python environment
-      uses: actions/setup-python@v2
-      with:
-        python-version: '2.x'
-        architecture: 'x64'
 
     - name: Set variables for compilation
       id: var
@@ -113,18 +108,18 @@ jobs:
   shrp:
     name: Build SkyHawk Recovery Project (SHRP)
     if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@master
 
     - name: Run pre-build housekeeping
       run: |
-        docker rmi `docker images -q`
+        docker images -q | xargs -r docker rmi
         sudo systemctl stop mysql
         sudo apt purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
         sudo rm -rf /etc/mysql /var/lib/mysql /var/log/mysql
         sudo rm -rf /usr/share/dotnet etc/php /etc/sudo apt/sources.list.d
-        sudo apt -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* php*
+        sudo apt -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* php*
         sudo apt update
         sudo apt -y autoremove --purge
         sudo apt clean
@@ -137,16 +132,11 @@ jobs:
       run: |
         sudo apt update
         sudo apt full-upgrade
-        sudo apt install git-core gnupg build-essential libelf-dev kernel-package openjdk-8-jdk bzip2 lib32stdc++6 libc6-dev-i386 git flex bison gperf zip curl zlib1g-dev gcc-multilib g++-multilib lib32ncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc unzip jq -y
+        sudo apt install git-core gnupg build-essential python2 python2-dev libelf-dev openjdk-8-jdk bzip2 lib32stdc++6 libc6-dev-i386 git flex bison gperf zip curl zlib1g-dev gcc-multilib g++-multilib libncurses5 libncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc unzip jq -y
+        sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
         mkdir ~/bin
         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
         chmod a+x ~/bin/repo
-
-    - name: Setup Python environment
-      uses: actions/setup-python@v2
-      with:
-        python-version: '2.x'
-        architecture: 'x64'
 
     - name: Set variables for compilation
       id: var
