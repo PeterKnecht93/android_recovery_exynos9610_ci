@@ -1,6 +1,7 @@
 name: Samsung Galaxy A50
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
 
