@@ -2,6 +2,12 @@ name: Samsung Galaxy A50
 
 on:
   workflow_dispatch:
+      inputs:
+          release:
+              description: 'Push release?'
+              required: true
+              default: false
+              type: boolean
 
 jobs:
   twrp:
@@ -99,7 +105,7 @@ jobs:
     - name: Upload release artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: twrp_release-${{ github.run_number }})
+        name: twrp_release-${{ github.run_number }}
         path: 'release'
         if-no-files-found: error
 
@@ -199,7 +205,7 @@ jobs:
     - name: Upload release artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: shrp_release-${{ github.run_number }})
+        name: shrp_release-${{ github.run_number }}
         path: 'release'
         if-no-files-found: error
 
@@ -235,16 +241,17 @@ jobs:
     - name: Merge TWRP release
       uses: actions/download-artifact@v4
       with:
-        name: twrp_release-${{ github.run_number }})
+        name: twrp_release-${{ github.run_number }}
         path: release
 
     - name: Merge SHRP release
       uses: actions/download-artifact@v4
       with:
-        name: shrp_release-${{ github.run_number }})
+        name: shrp_release-${{ github.run_number }}
         path: release
 
     - name: Upload release
+      if: inputs.release == true
       uses: Hs1r1us/Release-AIO@v1.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
